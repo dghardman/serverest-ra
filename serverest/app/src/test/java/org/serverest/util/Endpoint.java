@@ -1,7 +1,6 @@
 package org.serverest.util;
 
 public class Endpoint {
-
     public static final String login = "/login";
     public static final String usuarios = "/usuarios";
     public static final String usuariosId = "/usuarios/{_id}";

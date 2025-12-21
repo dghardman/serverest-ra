@@ -1,7 +1,6 @@
 package org.serverest.model;
 
 public class ProdutoDTO {
-
     private String id;
     private String nome;
     private Integer preco;

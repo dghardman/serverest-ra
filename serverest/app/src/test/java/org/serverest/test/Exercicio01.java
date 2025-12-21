@@ -1,16 +1,19 @@
 package org.serverest.test;
 
+import org.serverest.controller.Carrinho;
+import org.serverest.model.UsuarioDTO;
+import org.serverest.model.ProdutoDTO;
+import org.serverest.factory.UsuarioFactory;
+import org.serverest.factory.ProdutoFactory;
+import org.serverest.controller.Usuario;
+import org.serverest.controller.Produto;
 import org.apache.http.HttpStatus;
 import org.junit.Before;
 import org.junit.Test;
-import org.serverest.controller.Usuario;
-import org.serverest.factory.UsuarioFactory;
-import org.serverest.model.UsuarioDTO;
 import org.serverest.util.Ambiente;
 import org.serverest.util.Mensagem;
 
 public class Exercicio01 {
-
     private String ambiente;
 
     @Before
@@ -19,71 +22,35 @@ public class Exercicio01 {
     }
 
     @Test
-    public void validarCadastro() {
+    public void validarEstoque() {
+        //Criando usuário
+        UsuarioDTO admin = UsuarioFactory.criar("teste", "true");
+        admin.setId(Usuario.cadastrar(admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente));
 
-        //Pré-condição
-        UsuarioDTO usuarioDTO = new UsuarioDTO();
-        usuarioDTO = UsuarioFactory.criarAdmin();
+        //Autenticando usuário
+        admin.setToken(Usuario.autenticar(admin, HttpStatus.SC_OK, Mensagem.loginSucesso, ambiente));
 
-        //Validar cadastro com sucesso
-        usuarioDTO.setId(Usuario.cadastrar(usuarioDTO, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente));
+        //Criando produto
+        ProdutoDTO produto = ProdutoFactory.criar(500, 100);
+        produto.setId(Produto.cadastrar(produto, admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente));
 
-        //Validar cadastro com email duplicado
-        Usuario.cadastrar(usuarioDTO, HttpStatus.SC_BAD_REQUEST, Mensagem.emailUtilizado, ambiente);
-    }
+        //Criando carrinho
+        Carrinho.cadastrar(produto, 10, admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente);
 
-    @Test
-    public void validarExclusao() {
+        //Checando estoque reduzido
+        Produto.checarEstoque(produto, 90, HttpStatus.SC_OK, ambiente);
 
-        //Pré-condição
-        UsuarioDTO usuarioDTO = new UsuarioDTO();
-        usuarioDTO = UsuarioFactory.criarAdmin();
-        usuarioDTO.setId(Usuario.cadastrar(usuarioDTO, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente));
+        //Cancelando compra
+        Carrinho.cancelarCompra(admin, HttpStatus.SC_OK, Mensagem.cancelarCompra, ambiente);
 
-        //Validar exclusão de usuário existente
-        Usuario.excluir(usuarioDTO.getId(), HttpStatus.SC_OK, Mensagem.excluidoSucesso, ambiente);
+        //Checando estoque reabastecido
+        Produto.checarEstoque(produto, 100, HttpStatus.SC_OK, ambiente);
 
-        //Validar exclusão de usuário inexistente
-        Usuario.excluir(usuarioDTO.getId(), HttpStatus.SC_OK, Mensagem.nenhumRegistroExcluido, ambiente);
-    }
+        //Excluindo produto
+        Produto.excluir(produto, admin, HttpStatus.SC_OK, Mensagem.excluidoSucesso, ambiente);
 
-    @Test
-    public void validarEdicao() {
+        //Excluindo usuário
+        Usuario.excluir(admin, HttpStatus.SC_OK, Mensagem.excluidoSucesso, ambiente);
 
-        //Pré-condição
-        UsuarioDTO usuarioDTO = new UsuarioDTO();
-        UsuarioDTO usuario2DTO = new UsuarioDTO();
-        usuarioDTO = UsuarioFactory.criarAdmin();
-        usuario2DTO = UsuarioFactory.criarAdmin();
-        usuarioDTO.setId(Usuario.cadastrar(usuarioDTO, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente));
-
-        //Validar edição de usuário existente
-        Usuario.editar(usuarioDTO.getId(), usuarioDTO, HttpStatus.SC_OK, Mensagem.alteradoSucesso, ambiente);
-
-        //Validar edição de usuário inexistente
-        Usuario.editar("jogfODIlXsqxNFS5", usuario2DTO, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente);
-
-        //Validar edição de usuário com email duplicado
-        usuarioDTO.setEmail(usuario2DTO.getEmail());
-        Usuario.editar(usuarioDTO.getId(), usuarioDTO, HttpStatus.SC_BAD_REQUEST, Mensagem.emailUtilizado, ambiente);
-    }
-
-    @Test
-    public void validarBuscarPorId() {
-
-        //Pré-condição
-        UsuarioDTO usuarioDTO = new UsuarioDTO();
-        usuarioDTO = UsuarioFactory.criarAdmin();
-        usuarioDTO.setId(Usuario.cadastrar(usuarioDTO, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente));
-
-        //Validar busca de usuário por id
-        Usuario.buscarPorId(usuarioDTO.getId(), usuarioDTO, HttpStatus.SC_OK, ambiente);
-    }
-
-    @Test
-    public void validarListagem() {
-
-        //Validar listagem de usuários
-        Usuario.listar(HttpStatus.SC_OK, ambiente);
     }
 }

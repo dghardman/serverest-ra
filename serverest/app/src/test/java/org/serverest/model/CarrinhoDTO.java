@@ -1,7 +1,6 @@
 package org.serverest.model;
 
 public class CarrinhoDTO {
-
     private String id;
     private String produtoId;
     private Integer quantidade;

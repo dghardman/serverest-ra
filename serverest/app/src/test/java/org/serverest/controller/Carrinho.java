@@ -1,18 +1,20 @@
 package org.serverest.controller;
 
+import org.serverest.model.UsuarioDTO;
+import org.serverest.model.ProdutoDTO;
 import io.restassured.http.ContentType;
-import org.serverest.util.Ambiente;
 import org.serverest.util.Endpoint;
-import static org.hamcrest.CoreMatchers.is;
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.is;
+
 public class Carrinho {
-    public static void cadastrar(String produtoId, Integer quantidade, String usuarioToken, Integer statusCode, String mensagem, String ambiente) {
+    public static void cadastrar(ProdutoDTO produtoDTO, Integer quantidade, UsuarioDTO usuarioDTO, Integer statusCode, String mensagem, String ambiente) {
         given()
-                .header("authorization", usuarioToken)
+                .header("authorization", usuarioDTO.getToken())
                 .body("{\n" +
                         "  \"produtos\": [\n" +
                         "    {\n" +
-                        "      \"idProduto\": \"" + produtoId + "\",\n" +
+                        "      \"idProduto\": \"" + produtoDTO.getId() + "\",\n" +
                         "      \"quantidade\": " + quantidade + "\n" +
                         "    }\n" +
                         "  ]\n" +
@@ -25,9 +27,9 @@ public class Carrinho {
                 .body("message", is(mensagem));
     }
 
-    public static void cancelarCompra(String usuarioToken, Integer statusCode, String mensagem, String ambiente) {
+    public static void cancelarCompra(UsuarioDTO usuarioDTO, Integer statusCode, String mensagem, String ambiente) {
         given()
-                .header("authorization", usuarioToken)
+                .header("authorization", usuarioDTO.getToken())
         .when()
                 .delete(ambiente.concat(Endpoint.cancelarCompra))
         .then()

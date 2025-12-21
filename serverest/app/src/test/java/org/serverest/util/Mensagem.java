@@ -1,8 +1,6 @@
 package org.serverest.util;
 
 public class Mensagem {
-
-
     public static final String cadastroSucesso = "Cadastro realizado com sucesso";
     public static final String alteradoSucesso = "Registro alterado com sucesso";
     public static final String excluidoSucesso = "Registro excluído com sucesso";

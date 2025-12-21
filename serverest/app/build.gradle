@@ -23,7 +23,7 @@ dependencies {
     implementation libs.guava
 
     // REST Assured
-    testImplementation 'io.rest-assured:rest-assured:5.5.0'
+    testImplementation 'io.rest-assured:rest-assured:6.0.0'
 
     // Java Faker
     implementation 'com.github.javafaker:javafaker:1.0.2'
