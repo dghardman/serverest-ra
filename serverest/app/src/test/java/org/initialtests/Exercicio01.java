@@ -26,13 +26,13 @@ public class Exercicio01 {
 
         //GIVEN - WHEN - THEN
 
-        //A - Listar usuários
+        //A - Listar usuarios
         when()
                 .get("/usuarios")
                 .then()
                 .statusCode(HttpStatus.SC_OK);
 
-        //B - Cadastrar usuário
+        //B - Cadastrar usuario
         String userId = given()
                 .body("{\n" +
                         "  \"nome\": \"" + userName + "\",\n" +
@@ -62,7 +62,7 @@ public class Exercicio01 {
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("message", is("Este email já está sendo usado"));
 
-        //C - Listar detalhes do usuário
+        //C - Listar detalhes do usuario
         given()
                 .pathParam("_id", userId)
                 .when()
@@ -75,7 +75,7 @@ public class Exercicio01 {
                 .body("administrador", is("true"))
                 .body("_id", is(userId));
 
-        //D - Excluir usuário
+        //D - Excluir usuario
         given()
                 .pathParam("_id", userId)
                 .when()

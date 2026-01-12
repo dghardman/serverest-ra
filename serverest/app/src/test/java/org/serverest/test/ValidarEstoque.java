@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.serverest.util.Ambiente;
 import org.serverest.util.Mensagem;
 
-public class Exercicio01 {
+public class ValidarEstoque {
     private String ambiente;
 
     @Before
@@ -41,16 +41,16 @@ public class Exercicio01 {
         Produto.checarEstoque(produto, 90, HttpStatus.SC_OK, ambiente);
 
         //Cancelando compra
-        Carrinho.cancelarCompra(admin, HttpStatus.SC_OK, Mensagem.cancelarCompra, ambiente);
+        Carrinho.cancelarCompra(admin, HttpStatus.SC_OK, Mensagem.cancelamentoCompraSucesso, ambiente);
 
         //Checando estoque reabastecido
         Produto.checarEstoque(produto, 100, HttpStatus.SC_OK, ambiente);
 
         //Excluindo produto
-        Produto.excluir(produto, admin, HttpStatus.SC_OK, Mensagem.excluidoSucesso, ambiente);
+        Produto.excluir(produto, admin, HttpStatus.SC_OK, Mensagem.exclusaoSucesso, ambiente);
 
         //Excluindo usuário
-        Usuario.excluir(admin, HttpStatus.SC_OK, Mensagem.excluidoSucesso, ambiente);
+        Usuario.excluir(admin, HttpStatus.SC_OK, Mensagem.exclusaoSucesso, ambiente);
 
     }
 }

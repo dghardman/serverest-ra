@@ -41,7 +41,7 @@ public class UsuarioTeste {
         admin.setId(Usuario.cadastrar(admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente));
 
         //Validar exclusão de usuário existente
-        Usuario.excluir(admin, HttpStatus.SC_OK, Mensagem.excluidoSucesso, ambiente);
+        Usuario.excluir(admin, HttpStatus.SC_OK, Mensagem.exclusaoSucesso, ambiente);
 
         //Validar exclusão de usuário inexistente
         Usuario.excluir(admin, HttpStatus.SC_OK, Mensagem.nenhumRegistroExcluido, ambiente);
@@ -54,7 +54,7 @@ public class UsuarioTeste {
         admin.setId(Usuario.cadastrar(admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente));
 
         //Validar edição de usuário existente
-        Usuario.editar(admin.getId(), admin, HttpStatus.SC_OK, Mensagem.alteradoSucesso, ambiente);
+        Usuario.editar(admin.getId(), admin, HttpStatus.SC_OK, Mensagem.edicaoSucesso, ambiente);
 
         //Validar edição de usuário inexistente
         String id = IdFactory.criar(16);
