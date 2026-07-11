@@ -9,7 +9,7 @@ import org.junit.Test;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.is;
 
-public class Exercicio01 {
+public class Exercicio02 {
 
     @BeforeClass
     public static void preCondition() {
@@ -29,7 +29,7 @@ public class Exercicio01 {
         //A - Listar usuarios
         when()
                 .get("/usuarios")
-                .then()
+        .then()
                 .statusCode(HttpStatus.SC_OK);
 
         //B - Cadastrar usuario
@@ -41,9 +41,9 @@ public class Exercicio01 {
                         "  \"administrador\": \"true\"\n" +
                         "}")
                 .contentType(ContentType.JSON)
-                .when()
+        .when()
                 .post("/usuarios")
-                .then()
+        .then()
                 .statusCode(HttpStatus.SC_CREATED)
                 .body("message", is("Cadastro realizado com sucesso"))
                 .extract().path("_id");
@@ -56,18 +56,18 @@ public class Exercicio01 {
                         "  \"administrador\": \"true\"\n" +
                         "}")
                 .contentType(ContentType.JSON)
-                .when()
+        .when()
                 .post("/usuarios")
-                .then()
+        .then()
                 .statusCode(HttpStatus.SC_BAD_REQUEST)
                 .body("message", is("Este email já está sendo usado"));
 
         //C - Listar detalhes do usuario
         given()
                 .pathParam("_id", userId)
-                .when()
+        .when()
                 .get("/usuarios/{_id}")
-                .then()
+        .then()
                 .statusCode(HttpStatus.SC_OK)
                 .body("nome", is(userName))
                 .body("email", is(userEmail))
@@ -78,9 +78,9 @@ public class Exercicio01 {
         //D - Excluir usuario
         given()
                 .pathParam("_id", userId)
-                .when()
+        .when()
                 .delete("/usuarios/{_id}")
-                .then()
+        .then()
                 .statusCode(HttpStatus.SC_OK)
                 .body("message", is("Registro excluído com sucesso"));
     }

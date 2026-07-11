@@ -23,16 +23,16 @@ public class ValidarEstoque {
 
     @Test
     public void validarEstoque() {
-        //Criando usuário
+        //Criando usuario
         UsuarioDTO admin = UsuarioFactory.criar("teste", "true");
-        admin.setId(Usuario.cadastrar(admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente));
+        Usuario.cadastrar(admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente);
 
-        //Autenticando usuário
-        admin.setToken(Usuario.autenticar(admin, HttpStatus.SC_OK, Mensagem.loginSucesso, ambiente));
+        //Autenticando usuario
+        Usuario.autenticar(admin, HttpStatus.SC_OK, Mensagem.loginSucesso, ambiente);
 
         //Criando produto
         ProdutoDTO produto = ProdutoFactory.criar(500, 100);
-        produto.setId(Produto.cadastrar(produto, admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente));
+        Produto.cadastrar(produto, admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente);
 
         //Criando carrinho
         Carrinho.cadastrar(produto, 10, admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente);
@@ -49,7 +49,7 @@ public class ValidarEstoque {
         //Excluindo produto
         Produto.excluir(produto, admin, HttpStatus.SC_OK, Mensagem.exclusaoSucesso, ambiente);
 
-        //Excluindo usuário
+        //Excluindo usu?rio
         Usuario.excluir(admin, HttpStatus.SC_OK, Mensagem.exclusaoSucesso, ambiente);
 
     }

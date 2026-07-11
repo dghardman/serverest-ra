@@ -16,8 +16,8 @@ public class Produto {
                 .statusCode(statuscode);
     }
 
-    public static String cadastrar(ProdutoDTO produtoDTO, UsuarioDTO usuarioDTO, Integer statusCode, String mensagem, String ambiente) {
-        return given()
+    public static ProdutoDTO cadastrar(ProdutoDTO produtoDTO, UsuarioDTO usuarioDTO, Integer statusCode, String mensagem, String ambiente) {
+        produtoDTO.setId(given()
                 .header("Authorization", usuarioDTO.getToken())
                 .body("{\n" +
                         "  \"nome\": \"" + produtoDTO.getNome() + "\",\n" +
@@ -31,7 +31,8 @@ public class Produto {
         .then()
                 .statusCode(statusCode)
                 .body("message", is(mensagem))
-                .extract().path("_id");
+                .extract().path("_id"));
+        return produtoDTO;
     }
 
     public static void checarEstoque(ProdutoDTO produtoDTO, Integer quantidade, Integer statusCode, String ambiente) {

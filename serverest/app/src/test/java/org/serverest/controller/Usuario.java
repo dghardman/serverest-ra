@@ -15,8 +15,8 @@ public class Usuario {
                 .statusCode(statuscode);
     }
 
-    public static String cadastrar(UsuarioDTO usuarioDTO, Integer statusCode, String mensagem, String ambiente) {
-        return given()
+    public static UsuarioDTO cadastrar(UsuarioDTO usuarioDTO, Integer statusCode, String mensagem, String ambiente) {
+        usuarioDTO.setId(given()
                 .body("{\n" +
                         "  \"nome\": \"" + usuarioDTO.getNome() + "\",\n" +
                         "  \"email\": \"" + usuarioDTO.getEmail() + "\",\n" +
@@ -29,7 +29,8 @@ public class Usuario {
         .then()
                 .statusCode(statusCode)
                 .body("message", is(mensagem))
-                .extract().path("_id");
+                .extract().path("_id"));
+        return usuarioDTO;
     }
 
     public static void buscarPorId(UsuarioDTO usuarioDTO, Integer statusCode, String ambiente) {
@@ -74,8 +75,8 @@ public class Usuario {
                 .extract().path("_id");
     }
 
-    public static String autenticar(UsuarioDTO usuarioDTO, Integer statusCode, String message, String ambiente) {
-        return given()
+    public static UsuarioDTO autenticar(UsuarioDTO usuarioDTO, Integer statusCode, String message, String ambiente) {
+        usuarioDTO.setToken(given()
                 .body("{\n" +
                         "  \"email\": \"" + usuarioDTO.getEmail() + "\",\n" +
                         "  \"password\": \"" + usuarioDTO.getPassword() + "\"\n" +
@@ -86,6 +87,7 @@ public class Usuario {
         .then()
                 .statusCode(statusCode)
                 .body("message", is(message))
-                .extract().path("authorization");
+                .extract().path("authorization"));
+        return usuarioDTO;
     }
 }
