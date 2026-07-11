@@ -4,8 +4,7 @@ import org.serverest.model.UsuarioDTO;
 import org.serverest.model.ProdutoDTO;
 import io.restassured.http.ContentType;
 import org.serverest.util.Endpoint;
-import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.when;
+import static io.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.is;
 
 public class Produto {

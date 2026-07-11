@@ -1,16 +1,14 @@
 package org.initialtests;
 
+import org.junit.BeforeClass;
+import org.junit.Test;
 import com.github.javafaker.Faker;
 import io.restassured.http.ContentType;
 import org.apache.http.HttpStatus;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.CoreMatchers.is;
 
-public class Exercicio02 {
-
+public class Exercicio01 {
     @BeforeClass
     public static void preCondition() {
         baseURI = "http://localhost";
@@ -23,8 +21,6 @@ public class Exercicio02 {
         Faker faker = new Faker();
         String userName = faker.name().firstName();
         String userEmail = userName.concat("@eta.cesar.school");
-
-        //GIVEN - WHEN - THEN
 
         //A - Listar usuarios
         when()
@@ -47,6 +43,7 @@ public class Exercicio02 {
                 .statusCode(HttpStatus.SC_CREATED)
                 .body("message", is("Cadastro realizado com sucesso"))
                 .extract().path("_id");
+
         //B1 - Checar email duplicado
         given()
                 .body("{\n" +

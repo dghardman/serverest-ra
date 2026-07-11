@@ -13,8 +13,13 @@ import org.junit.Test;
 import org.serverest.util.Ambiente;
 import org.serverest.util.Mensagem;
 
-public class ValidarEstoque {
+public class TestValidarEstoque {
     private String ambiente;
+    private String userPassword = "teste";
+    private String adminUser = "true";
+    private Integer productPrice = 10;
+    private Integer productInitialAmount = 100;
+    private Integer productCartAmount = 8;
 
     @Before
     public void definirAmbiente() {
@@ -24,27 +29,27 @@ public class ValidarEstoque {
     @Test
     public void validarEstoque() {
         //Criando usuario
-        UsuarioDTO admin = UsuarioFactory.criar("teste", "true");
+        UsuarioDTO admin = UsuarioFactory.criar(userPassword, adminUser);
         Usuario.cadastrar(admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente);
 
         //Autenticando usuario
         Usuario.autenticar(admin, HttpStatus.SC_OK, Mensagem.loginSucesso, ambiente);
 
         //Criando produto
-        ProdutoDTO produto = ProdutoFactory.criar(500, 100);
+        ProdutoDTO produto = ProdutoFactory.criar(productPrice, productInitialAmount);
         Produto.cadastrar(produto, admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente);
 
         //Criando carrinho
-        Carrinho.cadastrar(produto, 10, admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente);
+        Carrinho.cadastrar(produto, productCartAmount, admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente);
 
         //Checando estoque reduzido
-        Produto.checarEstoque(produto, 90, HttpStatus.SC_OK, ambiente);
+        Produto.checarEstoque(produto, productInitialAmount - productCartAmount, HttpStatus.SC_OK, ambiente);
 
         //Cancelando compra
         Carrinho.cancelarCompra(admin, HttpStatus.SC_OK, Mensagem.cancelamentoCompraSucesso, ambiente);
 
         //Checando estoque reabastecido
-        Produto.checarEstoque(produto, 100, HttpStatus.SC_OK, ambiente);
+        Produto.checarEstoque(produto, productInitialAmount, HttpStatus.SC_OK, ambiente);
 
         //Excluindo produto
         Produto.excluir(produto, admin, HttpStatus.SC_OK, Mensagem.exclusaoSucesso, ambiente);

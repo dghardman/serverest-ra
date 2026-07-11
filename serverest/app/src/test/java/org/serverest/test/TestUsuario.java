@@ -10,8 +10,11 @@ import org.serverest.model.UsuarioDTO;
 import org.serverest.util.Ambiente;
 import org.serverest.util.Mensagem;
 
-public class UsuarioTeste {
+public class TestUsuario {
     private String ambiente;
+    private Integer idLength = 16;
+    private String userPassword = "teste";
+    private String adminUser = "true";
 
     @Before
     public void definirAmbiente() {
@@ -26,7 +29,7 @@ public class UsuarioTeste {
 
     @Test
     public void validarCadastro() {
-        UsuarioDTO admin = UsuarioFactory.criar("teste", "true");
+        UsuarioDTO admin = UsuarioFactory.criar(userPassword, adminUser);
 
         //Validar cadastro com sucesso
         Usuario.cadastrar(admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente);
@@ -37,7 +40,7 @@ public class UsuarioTeste {
 
     @Test
     public void validarExclusao() {
-        UsuarioDTO admin = UsuarioFactory.criar("teste", "true");
+        UsuarioDTO admin = UsuarioFactory.criar(userPassword, adminUser);
         Usuario.cadastrar(admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente);
 
         //Validar exclusao de usuario existente
@@ -49,15 +52,15 @@ public class UsuarioTeste {
 
     @Test
     public void validarEdicao() {
-        UsuarioDTO admin = UsuarioFactory.criar("teste", "true");
-        UsuarioDTO admin2 = UsuarioFactory.criar("teste", "true");
+        UsuarioDTO admin = UsuarioFactory.criar(userPassword, adminUser);
+        UsuarioDTO admin2 = UsuarioFactory.criar(userPassword, adminUser);
         Usuario.cadastrar(admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente);
 
         //Validar edicao de usuario existente
         Usuario.editar(admin.getId(), admin, HttpStatus.SC_OK, Mensagem.edicaoSucesso, ambiente);
 
         //Validar edicao de usuario inexistente
-        String id = IdFactory.criar(16);
+        String id = IdFactory.criar(idLength);
         Usuario.editar(id, admin2, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente);
 
         //Validar edicao de usuario com email duplicado
@@ -67,7 +70,7 @@ public class UsuarioTeste {
 
     @Test
     public void validarBuscarPorId() {
-        UsuarioDTO admin = UsuarioFactory.criar("teste", "true");
+        UsuarioDTO admin = UsuarioFactory.criar(userPassword, adminUser);
         Usuario.cadastrar(admin, HttpStatus.SC_CREATED, Mensagem.cadastroSucesso, ambiente);
 
         //Validar busca de usuario por id
